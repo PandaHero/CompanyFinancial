@@ -155,46 +155,67 @@ def get_company_date(stock_id, companyAbbr, tuple_date, url):
 
 
 def main():
+    # with open(r"C:\Users\chen\Desktop\新建 Microsoft Excel 工作表.csv", "w+", newline="") as csvFile:
+    #     writer = csv.writer(csvFile)
+    #     writer.writerow(["companyAbbr", "stock_id", "feature", "year", "value"])
+    #     suggestData = get_resale_company()
+    #     companyInfoUrl = "http://listxbrl.sse.com.cn/companyInfo/showmap.do"
+    #     capitalUrl = "http://listxbrl.sse.com.cn/capital/showmap.do?"
+    #     showTopTenMapUrl = "http://listxbrl.sse.com.cn/companyInfo/showTopTenMap.do"
+    #     balanceUrl = "http://listxbrl.sse.com.cn/companyInfo/showBalance.do"
+    #     profitUrl = "http://listxbrl.sse.com.cn/profit/showmap.do"
+    #     cashUrl = "http://listxbrl.sse.com.cn/cash/showmap.do"
+    #     count = 0
+    #     for item in suggestData:
+    #         # 基本信息表
+    #         compInfoDate = get_company_date(item["companyCode"], item["companyAbbr"], basic_info, companyInfoUrl)
+    #         # 股本结构表
+    #         capitalDate = get_company_date(item["companyCode"], item["companyAbbr"], stock_structure, capitalUrl)
+    #         # 前十大股东表
+    #         topTenMapDate = get_company_date(item["companyCode"], item["companyAbbr"], top_ten_shareholder,
+    #                                          showTopTenMapUrl)
+    #
+    #         # 资产负债表
+    #         balanceDate = get_company_date(item["companyCode"], item["companyAbbr"], assert_debts, balanceUrl)
+    #         # 利润表
+    #         profitDate = get_company_date(item["companyCode"], item["companyAbbr"], profit, profitUrl)
+    #         # 现金流量表
+    #         cashDate = get_company_date(item["companyCode"], item["companyAbbr"], cash_stream, cashUrl)
+    #         for item in compInfoDate:
+    #             writer.writerow([date for date in item])
+    #         for item in capitalDate:
+    #             writer.writerow([date for date in item])
+    #         for item in topTenMapDate:
+    #             writer.writerow([date for date in item])
+    #         for item in balanceDate:
+    #             writer.writerow([date for date in item])
+    #         for item in profitDate:
+    #             writer.writerow([date for date in item])
+    #         for item in cashDate:
+    #             writer.writerow([date for date in item])
+    #         count += 1
+    #         print("第" + str(count) + "次写入成功")
     with open(r"C:\Users\chen\Desktop\新建 Microsoft Excel 工作表.csv", "w+", newline="") as csvFile:
         writer = csv.writer(csvFile)
-        writer.writerow(["companyAbbr", "stock_id", "feature", "year", "value"])
+        writer.writerow(
+            ["companyAbbr", "stock_id", "rank", "year", "company_holder_name", "num_1", "stock_num", "num_2",
+             "stock_proportion", "num_3"])
         suggestData = get_resale_company()
-        companyInfoUrl = "http://listxbrl.sse.com.cn/companyInfo/showmap.do"
-        capitalUrl = "http://listxbrl.sse.com.cn/capital/showmap.do?"
         showTopTenMapUrl = "http://listxbrl.sse.com.cn/companyInfo/showTopTenMap.do"
-        balanceUrl = "http://listxbrl.sse.com.cn/companyInfo/showBalance.do"
-        profitUrl = "http://listxbrl.sse.com.cn/profit/showmap.do"
-        cashUrl = "http://listxbrl.sse.com.cn/cash/showmap.do"
-        count = 0
+
         for item in suggestData:
-            # 基本信息表
-            compInfoDate = get_company_date(item["companyCode"], item["companyAbbr"], basic_info, companyInfoUrl)
-            # 股本结构表
-            capitalDate = get_company_date(item["companyCode"], item["companyAbbr"], stock_structure, capitalUrl)
             # 前十大股东表
             topTenMapDate = get_company_date(item["companyCode"], item["companyAbbr"], top_ten_shareholder,
                                              showTopTenMapUrl)
-
-            # 资产负债表
-            balanceDate = get_company_date(item["companyCode"], item["companyAbbr"], assert_debts, balanceUrl)
-            # 利润表
-            profitDate = get_company_date(item["companyCode"], item["companyAbbr"], profit, profitUrl)
-            # 现金流量表
-            cashDate = get_company_date(item["companyCode"], item["companyAbbr"], cash_stream, cashUrl)
-            for item in compInfoDate:
-                writer.writerow([date for date in item])
-            for item in capitalDate:
-                writer.writerow([date for date in item])
             for item in topTenMapDate:
-                writer.writerow([date for date in item])
-            for item in balanceDate:
-                writer.writerow([date for date in item])
-            for item in profitDate:
-                writer.writerow([date for date in item])
-            for item in cashDate:
-                writer.writerow([date for date in item])
-            count += 1
-            print("第" + str(count) + "次写入成功")
+                split_1 = item[-1].split("</br>")
+                dic_1 = {}
+                for date in split_1:
+                    split_2 = date.split("：")
+                    dic_1[split_2[0]] = split_2[-1]
+                print(dic_1.items())
+                writer.writerow([])
+                print("------------")
 
 
 if __name__ == '__main__':
